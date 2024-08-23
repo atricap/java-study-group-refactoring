@@ -14,8 +14,8 @@ public abstract class ProjectDataReloader {
     private static final long DEFAULT_RELOAD_MILLIS = 30000;
     private static final long DEFAULT_SLEEPING_MILLIS = 1000;
 
-    private long reloadMillis;
-    private long sleepingMillis;
+    private final long reloadMillis;
+    private final long sleepingMillis;
     
     private boolean stopped = false;
 

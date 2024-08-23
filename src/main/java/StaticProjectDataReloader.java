@@ -2,10 +2,9 @@
 import java.time.Clock;
 
 /**
- * A reloader for projects that are no longer "live."  Project details and data
+ * A reloader for projects that are now "static" rather than "live".  Project details and data
  * are not expected to change, so only login statistics are required to be kept
  * fresh.
- *
  */
 public class StaticProjectDataReloader extends ProjectDataReloader {
 
@@ -26,14 +25,7 @@ public class StaticProjectDataReloader extends ProjectDataReloader {
         
         // load details every other reload attempt
         if (reloadsCounter % 2 == 0) {
-            new Thread( new Runnable() {
-                
-                @Override
-                public void run() {
-                    loadLoginStatistics();
-                    
-                }
-            }).start();
+            new Thread(this::loadLoginStatistics).start();
         }
         
     }
