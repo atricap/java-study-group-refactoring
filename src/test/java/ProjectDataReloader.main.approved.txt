@@ -1,0 +1,116 @@
+Starting project data reloading thread for project "project1", type: STATIC
+Starting reloading for project project1
+Done reloading for project project1
+Loading login statistics for project project1
+(Talking to our login server via http request)
+Project: project1; type: STATIC
+neverUpdated
+neverUpdated
+neverUpdated
+
+Starting project data reloading thread for project "project2", type: LIVE
+Starting reloading for project project2
+Loading project details for project project2
+(Talking to database and updating our project-related objects.)
+Loading last update time for project project2
+(Checking the database to see when the data was last refreshed)
+Done reloading for project project2
+Project: project2; type: LIVE
+Project details created: Fri Aug 23 14:18:45 CEST 2024
+Project update time calculated: Fri Aug 23 14:18:45 CEST 2024
+neverUpdated
+
+Loading login statistics for project project2
+(Talking to our login server via http request)
+Starting reloading for project project1
+Done reloading for project project1
+Project: project1; type: STATIC
+neverUpdated
+neverUpdated
+Login statistics looked up: Fri Aug 23 14:18:45 CEST 2024
+
+Starting reloading for project project2
+Done reloading for project project2
+Project: project2; type: LIVE
+Project details created: Fri Aug 23 14:18:45 CEST 2024
+Project update time calculated: Fri Aug 23 14:18:45 CEST 2024
+Login statistics looked up: Fri Aug 23 14:18:45 CEST 2024
+
+Loading last update time for project project2
+(Checking the database to see when the data was last refreshed)
+Starting reloading for project project1
+Done reloading for project project1
+Project: project1; type: STATIC
+neverUpdated
+neverUpdated
+Login statistics looked up: Fri Aug 23 14:18:45 CEST 2024
+
+Loading login statistics for project project1
+(Talking to our login server via http request)
+Starting reloading for project project2
+Done reloading for project project2
+Project: project2; type: LIVE
+Project details created: Fri Aug 23 14:18:45 CEST 2024
+Project update time calculated: Fri Aug 23 14:19:16 CEST 2024
+Login statistics looked up: Fri Aug 23 14:18:45 CEST 2024
+
+Loading project details for project project2
+(Talking to database and updating our project-related objects.)
+Loading last update time for project project2
+(Checking the database to see when the data was last refreshed)
+Starting reloading for project project1
+Done reloading for project project1
+Project: project1; type: STATIC
+neverUpdated
+neverUpdated
+Login statistics looked up: Fri Aug 23 14:19:45 CEST 2024
+
+Starting reloading for project project2
+Done reloading for project project2
+Project: project2; type: LIVE
+Project details created: Fri Aug 23 14:19:46 CEST 2024
+Project update time calculated: Fri Aug 23 14:19:46 CEST 2024
+Login statistics looked up: Fri Aug 23 14:18:45 CEST 2024
+
+Loading last update time for project project2
+(Checking the database to see when the data was last refreshed)
+Starting reloading for project project1
+Done reloading for project project1
+Project: project1; type: STATIC
+neverUpdated
+neverUpdated
+Login statistics looked up: Fri Aug 23 14:19:45 CEST 2024
+
+Loading login statistics for project project1
+(Talking to our login server via http request)
+Starting reloading for project project2
+Done reloading for project project2
+Project: project2; type: LIVE
+Project details created: Fri Aug 23 14:19:46 CEST 2024
+Project update time calculated: Fri Aug 23 14:20:16 CEST 2024
+Login statistics looked up: Fri Aug 23 14:18:45 CEST 2024
+
+Loading project details for project project2
+(Talking to database and updating our project-related objects.)
+Loading last update time for project project2
+(Checking the database to see when the data was last refreshed)
+Starting reloading for project project1
+Done reloading for project project1
+Project: project1; type: STATIC
+neverUpdated
+neverUpdated
+Login statistics looked up: Fri Aug 23 14:20:45 CEST 2024
+
+Starting reloading for project project2
+Done reloading for project project2
+Project: project2; type: LIVE
+Project details created: Fri Aug 23 14:20:46 CEST 2024
+Project update time calculated: Fri Aug 23 14:20:46 CEST 2024
+Login statistics looked up: Fri Aug 23 14:18:45 CEST 2024
+
+Loading last update time for project project2
+(Checking the database to see when the data was last refreshed)
+Stopping project persistence reloading thread for project "project1"...
+Stopping project persistence reloading thread for project "project2"...
+Stopped project persistence reloading thread for project "project2"
+Stopped project persistence reloading thread for project "project1"
