@@ -1,5 +1,8 @@
 
 import java.time.Clock;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 
 /**
@@ -15,7 +18,8 @@ public class ProjectDataReloader {
 
     private final long reloadMillis;
     private final long sleepingMillis;
-    
+
+    private ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     private boolean stopped = false;
 
     /**
@@ -66,44 +70,22 @@ public class ProjectDataReloader {
     }
 
     public void start() {
-        reloaderThread = new Thread(this::run);
+        out.println(String.format("Starting project data reloading thread for project \"%s\", type: %s",
+                project.getName(), project.getType()));
 
-        reloaderThread.start();
+        executor.scheduleAtFixedRate(this::tryReloadProjectData, 0, reloadMillis, MILLISECONDS);
     }
 
     public void stop() {
 
         out.println(String.format("Stopping project persistence reloading thread for project \"%s\"...", project.getName()));
 
-        stopped = true;
-    }
-
-    private void run() {
-        out.println(String.format("Starting project data reloading thread for project \"%s\", type: %s",
-                project.getName(), project.getType()));
-
-        try {
-            while (!stopped) {
-                runSingle();
-            }
-        } catch (StoppedException expected) {
-        }
+        executor.shutdown();
 
         out.println("Stopped project persistence reloading thread for project \"" + project.getName() + "\"");
     }
 
-    private void runSingle() throws StoppedException {
-        long startTime = clock.millis();
-
-        tryReloadProjectData();
-
-        long timeUsedForLastReload = clock.millis() - startTime;
-
-        sleepUntilNextFetch(timeUsedForLastReload);
-        reloadsCounter++;
-    }
-
-    private void tryReloadProjectData() throws StoppedException {
+    private void tryReloadProjectData() {
         try {
             // call a project-type-specific reloading procedure that reloads some of the project data from
             // persistence
@@ -118,40 +100,7 @@ public class ProjectDataReloader {
                     + e.getMessage());
         }
 
-        checkTerminationFlag();
-    }
-
-    private void checkTerminationFlag() throws StoppedException {
-        synchronized (ProjectDataReloader.this) {
-            if (stopped) {
-                throw new StoppedException();
-            }
-        }
-    }
-
-    private void sleepUntilNextFetch(long timeUsedForLastReload) {
-        if (timeUsedForLastReload >= reloadMillis) {
-            return;
-        }
-
-        long timeLeftToSleep = reloadMillis - timeUsedForLastReload;
-
-        while (timeLeftToSleep > 0) {
-
-            synchronized (ProjectDataReloader.this) {
-                if (stopped) {
-                    break;
-                }
-            }
-
-            try {
-                Thread.sleep(sleepingMillis);
-            } catch (InterruptedException ex) {
-                continue;
-            }
-
-            timeLeftToSleep -= sleepingMillis;
-        }
+        reloadsCounter++;
     }
 
     public static void main(String[] args) {
