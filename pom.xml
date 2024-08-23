@@ -5,7 +5,11 @@
   <version>1.0.0</version>
   <name>Refactoring Excercise</name>
   <description>Code to refactor</description>
-  
+
+  <properties>
+    <maven.compiler.release>11</maven.compiler.release>
+  </properties>
+
   <dependencies>
           <dependency>
             <groupId>log4j</groupId>
