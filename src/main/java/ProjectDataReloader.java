@@ -38,22 +38,33 @@ public abstract class ProjectDataReloader {
      * used for reloading data types more or less often
      */
     protected int reloadsCounter = 0;
-    
+
+    protected Printer out;
+
     public static ProjectDataReloader getReloaderForType(Project project) {
-        
+        return getReloaderForType(project, new SystemOutPrinter());
+    }
+
+    public static ProjectDataReloader getReloaderForType(Project project, Printer out) {
+
         ProjectType type = project.getType();
         if (type.equals(ProjectType.STATIC)) {
-            return new StaticProjectDataReloader(project);
+            return new StaticProjectDataReloader(project, out);
         } else if (type.equals(ProjectType.LIVE)) {
-            return new LiveProjectDataReloader(project);
+            return new LiveProjectDataReloader(project, out);
         }
         return null;
     }
-    
+
     protected ProjectDataReloader(Project project) {
-        this.project = project;
+        this(project, new SystemOutPrinter());
     }
-    
+
+    public ProjectDataReloader(Project project, Printer out) {
+        this.project = project;
+        this.out = out;
+    }
+
     /**
      * The reload method, called once per reload period;
      */
@@ -65,7 +76,7 @@ public abstract class ProjectDataReloader {
 
             @Override
             public void run() {
-                System.out.println("Starting project data reloading thread for project \"" + project.getName() + "\", type: "
+                out.println("Starting project data reloading thread for project \"" + project.getName() + "\", type: "
                     + project.getType());
 
                 while (!stopped) {
@@ -77,11 +88,11 @@ public abstract class ProjectDataReloader {
 
                         // call a project-type-specific reloading procedure that reloads some of the project data from
                         // persistence
-                        System.out.println("Starting reloading for project " + project.getName());
+                        out.println("Starting reloading for project " + project.getName());
                         reloadProjectData();
-                        System.out.println("Done reloading for project " + project.getName());
+                        out.println("Done reloading for project " + project.getName());
                         project.prettyPrint();
-                        System.out.println();
+                        out.println();
 
                         // check the termination flag
                         synchronized (ProjectDataReloader.this) {
@@ -124,7 +135,7 @@ public abstract class ProjectDataReloader {
                     reloadsCounter++;
                 }
 
-                System.out.println("Stopped project persistence reloading thread for project \"" + project.getName() + "\"");
+                out.println("Stopped project persistence reloading thread for project \"" + project.getName() + "\"");
             }
         });
 
@@ -132,8 +143,8 @@ public abstract class ProjectDataReloader {
     }
     
     protected void loadProjectDetails() {
-        System.out.println("Loading project details for project " + project.getName());
-        System.out.println("(Talking to database and updating our project-related objects.)");
+        out.println("Loading project details for project " + project.getName());
+        out.println("(Talking to database and updating our project-related objects.)");
         //this could be a lot of lines of code and involve collaborators, helpers, etc
         //...
         //...
@@ -157,8 +168,8 @@ public abstract class ProjectDataReloader {
     }
     
     protected void loadLastUpdateTime() {
-        System.out.println("Loading last update time for project " + project.getName());
-        System.out.println("(Checking the database to see when the data was last refreshed)");
+        out.println("Loading last update time for project " + project.getName());
+        out.println("(Checking the database to see when the data was last refreshed)");
         // this might also be a lot of lines of code
         //...
         //...
@@ -178,8 +189,8 @@ public abstract class ProjectDataReloader {
     }
     
     protected void loadLoginStatistics() {
-        System.out.println("Loading login statistics for project " + project.getName());
-        System.out.println("(Talking to our login server via http request)");
+        out.println("Loading login statistics for project " + project.getName());
+        out.println("(Talking to our login server via http request)");
         // This might involve other collaborators/helpers to make the http request and 
         // handle the response.
         //...
@@ -199,7 +210,7 @@ public abstract class ProjectDataReloader {
     
     public void stop() {
         
-        System.out.println("Stopping project persistence reloading thread for project \"" + project.getName() + "\"...");
+        out.println("Stopping project persistence reloading thread for project \"" + project.getName() + "\"...");
         
         stopped = true;
     }

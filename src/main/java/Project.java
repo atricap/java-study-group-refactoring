@@ -6,10 +6,16 @@ public class Project {
     private String projectDetails = "neverUpdated";
     private String lastUpdateTime = "neverUpdated";
     private String loginStatistics = "neverUpdated";
-    
+    private Printer out;
+
     public Project(String name, ProjectType type) {
+        this(name, type, new SystemOutPrinter());
+    }
+
+    public Project(String name, ProjectType type, Printer out) {
         this.name = name;
         this.type = type;
+        this.out = out;
     }
 
     public String getName() {
@@ -45,14 +51,9 @@ public class Project {
     }
 
     public void prettyPrint() {
-        System.out.println("Project: " + getName() + "; type: " + getType());
-        System.out.println(getProjectDetails());
-        System.out.println(getLastUpdateTime());
-        System.out.println(getLoginStatistics());
-        
-        
+        out.println("Project: " + getName() + "; type: " + getType());
+        out.println(getProjectDetails());
+        out.println(getLastUpdateTime());
+        out.println(getLoginStatistics());
     }
-    
-    
-
 }

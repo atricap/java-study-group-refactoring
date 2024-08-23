@@ -11,6 +11,10 @@ public class StaticProjectDataReloader extends ProjectDataReloader {
         super(project);
     }
 
+    protected StaticProjectDataReloader(Project project, Printer out) {
+        super(project, out);
+    }
+
     @Override
     protected void reloadProjectData() {
         

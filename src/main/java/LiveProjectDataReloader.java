@@ -11,6 +11,10 @@ public class LiveProjectDataReloader extends ProjectDataReloader {
         super(project);
     }
 
+    protected LiveProjectDataReloader(Project project, Printer out) {
+        super(project, out);
+    }
+
     @Override
     protected void reloadProjectData() {
         // load details every other reload attempt
