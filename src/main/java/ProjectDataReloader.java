@@ -82,28 +82,28 @@ public class ProjectDataReloader {
         out.println(String.format("Starting project data reloading thread for project \"%s\", type: %s",
                 project.getName(), project.getType()));
 
-        while (!stopped) {
-            boolean shouldBrake = runSingle();
-            if (shouldBrake) break;
+        try {
+            while (!stopped) {
+                runSingle();
+            }
+        } catch (StoppedException expected) {
         }
 
         out.println("Stopped project persistence reloading thread for project \"" + project.getName() + "\"");
     }
 
-    private boolean runSingle() {
+    private void runSingle() throws StoppedException {
         long startTime = clock.millis();
 
-        boolean shouldBrake = tryReloadProjectData();
-        if (shouldBrake) return true;
+        tryReloadProjectData();
 
         long timeUsedForLastReload = clock.millis() - startTime;
 
         sleepUntilNextFetch(timeUsedForLastReload);
         reloadsCounter++;
-        return false;
     }
 
-    private boolean tryReloadProjectData() {
+    private void tryReloadProjectData() throws StoppedException {
         try {
             // call a project-type-specific reloading procedure that reloads some of the project data from
             // persistence
@@ -113,17 +113,20 @@ public class ProjectDataReloader {
             out.println(project.getPretty());
             out.println();
 
-            // check the termination flag
-            synchronized (ProjectDataReloader.this) {
-                if (stopped) {
-                    return true;
-                }
-            }
         } catch (Exception e) {
             System.err.println("Could not load project data for ptoject " + project.getName() + " : "
                     + e.getMessage());
         }
-        return false;
+
+        checkTerminationFlag();
+    }
+
+    private void checkTerminationFlag() throws StoppedException {
+        synchronized (ProjectDataReloader.this) {
+            if (stopped) {
+                throw new StoppedException();
+            }
+        }
     }
 
     private void sleepUntilNextFetch(long timeUsedForLastReload) {
