@@ -1,6 +1,5 @@
 
 import java.time.Clock;
-import java.util.Date;
 
 
 /**
@@ -9,7 +8,7 @@ import java.util.Date;
  * This is NOT good code, but it's realistic code... in that I found it in one of my 
  * systems.  We'll refactor it and make it better.
  */
-public abstract class ProjectDataReloader {
+public class ProjectDataReloader {
     
     private static final long DEFAULT_RELOAD_MILLIS = 30000;
     private static final long DEFAULT_SLEEPING_MILLIS = 1000;
@@ -43,9 +42,9 @@ public abstract class ProjectDataReloader {
 
         ProjectType type = project.getType();
         if (type.equals(ProjectType.STATIC)) {
-            return new StaticProjectDataReloader(project, out, clock);
+            return new ProjectDataReloader(project, out, clock);
         } else if (type.equals(ProjectType.LIVE)) {
-            return new LiveProjectDataReloader(project, out, clock);
+            return new ProjectDataReloader(project, out, clock);
         }
         return null;
     }
@@ -65,11 +64,6 @@ public abstract class ProjectDataReloader {
         this.reloadMillis = reloadMillis;
         this.sleepingMillis = sleepingMillis;
     }
-
-    /**
-     * Called once per reload period
-     */
-    protected abstract void reloadProjectData();
 
     public void start() {
         reloaderThread = new Thread(this::run);
@@ -114,7 +108,7 @@ public abstract class ProjectDataReloader {
             // call a project-type-specific reloading procedure that reloads some of the project data from
             // persistence
             out.println("Starting reloading for project " + project.getName());
-            reloadProjectData();
+            project.reloadProjectData(reloadsCounter, out, clock);
             out.println("Done reloading for project " + project.getName());
             out.println(project.getPretty());
             out.println();
@@ -155,72 +149,6 @@ public abstract class ProjectDataReloader {
 
             timeLeftToSleep -= sleepingMillis;
         }
-    }
-
-    protected void loadProjectDetails() {
-        out.println("Loading project details for project " + project.getName());
-        out.println("(Talking to database and updating our project-related objects.)");
-        //this could be a lot of lines of code and involve collaborators, helpers, etc
-        //...
-        //...
-        //...
-        //...
-        //...
-        //...
-        //...
-        //... Talk to database,
-        //... Build domain objects,
-        //... Update stuff
-        //...
-        //...
-        //...
-        //...
-        //...
-        //... Clear previously cached data
-        //...
-        //... Cache fresh data
-        project.setProjectDetails("Project details created: " + new Date(clock.millis()));
-    }
-
-    protected void loadLastUpdateTime() {
-        out.println("Loading last update time for project " + project.getName());
-        out.println("(Checking the database to see when the data was last refreshed)");
-        // this might also be a lot of lines of code
-        //...
-        //...
-        //...
-        //...
-        //...
-        //...
-        //... Look at database
-        //...
-        //...
-        //...
-        //...
-        //... Clear previously cached data
-        //...
-        //... Cache fresh data
-        project.setLastUpdateTime("Project update time calculated: " + new Date(clock.millis()));
-    }
-
-    protected void loadLoginStatistics() {
-        out.println("Loading login statistics for project " + project.getName());
-        out.println("(Talking to our login server via http request)");
-        // This might involve other collaborators/helpers to make the http request and
-        // handle the response.
-        //...
-        //...
-        //...
-        //...
-        //...
-        //... Talk to login server
-        //...
-        //...
-        //...
-        //... Clear previously cached data
-        //...
-        //... Cache fresh data
-        project.setLoginStatistics("Login statistics looked up: " + new Date(clock.millis()));
     }
 
     public static void main(String[] args) {

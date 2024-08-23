@@ -19,22 +19,4 @@ public class LiveProjectDataReloader extends ProjectDataReloader {
     protected LiveProjectDataReloader(Project project, Printer out, Clock clock, long reloadMillis, long sleepingMillis) {
         super(project, out, clock, reloadMillis, sleepingMillis);
     }
-
-    @Override
-    protected void reloadProjectData() {
-        // load details every other reload attempt
-        if (reloadsCounter % 2 == 0) {
-            new Thread(this::loadProjectDetails).start();
-        }
-        
-        //do this often
-        new Thread(this::loadLastUpdateTime).start();
-        
-        // don't need this very often..
-        // load login statistics every five hundred reload attempts
-        if (reloadsCounter % 500 == 0) {
-            new Thread(this::loadLoginStatistics).start();
-        }
-    }
-
 }

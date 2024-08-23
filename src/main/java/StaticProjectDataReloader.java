@@ -19,15 +19,4 @@ public class StaticProjectDataReloader extends ProjectDataReloader {
     protected StaticProjectDataReloader(Project project, Printer out, Clock clock, long reloadMillis, long sleepingMillis) {
         super(project, out, clock, reloadMillis, sleepingMillis);
     }
-
-    @Override
-    protected void reloadProjectData() {
-        
-        // load details every other reload attempt
-        if (reloadsCounter % 2 == 0) {
-            new Thread(this::loadLoginStatistics).start();
-        }
-        
-    }
-
 }
