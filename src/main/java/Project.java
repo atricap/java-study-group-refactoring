@@ -50,10 +50,15 @@ public class Project {
         this.loginStatistics = loginStatistics;
     }
 
-    public void prettyPrint() {
-        out.println("Project: " + getName() + "; type: " + getType());
-        out.println(getProjectDetails());
-        out.println(getLastUpdateTime());
-        out.println(getLoginStatistics());
+    public String getPretty() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Project: " + getName() + "; type: " + getType());
+        sb.append(System.lineSeparator());
+        sb.append(getProjectDetails());
+        sb.append(System.lineSeparator());
+        sb.append(getLastUpdateTime());
+        sb.append(System.lineSeparator());
+        sb.append(getLoginStatistics());
+        return sb.toString();
     }
 }
