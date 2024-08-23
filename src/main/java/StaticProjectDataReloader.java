@@ -1,4 +1,6 @@
 
+import java.time.Clock;
+
 /**
  * A reloader for projects that are no longer "live."  Project details and data
  * are not expected to change, so only login statistics are required to be kept
@@ -11,8 +13,8 @@ public class StaticProjectDataReloader extends ProjectDataReloader {
         super(project);
     }
 
-    protected StaticProjectDataReloader(Project project, Printer out) {
-        super(project, out);
+    protected StaticProjectDataReloader(Project project, Printer out, Clock clock) {
+        super(project, out, clock);
     }
 
     @Override

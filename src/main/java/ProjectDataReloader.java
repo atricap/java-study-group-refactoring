@@ -1,4 +1,5 @@
 
+import java.time.Clock;
 import java.util.Date;
 
 
@@ -40,29 +41,31 @@ public abstract class ProjectDataReloader {
     protected int reloadsCounter = 0;
 
     protected Printer out;
+    protected Clock clock;
 
     public static ProjectDataReloader getReloaderForType(Project project) {
-        return getReloaderForType(project, new SystemOutPrinter());
+        return getReloaderForType(project, new SystemOutPrinter(), Clock.systemUTC());
     }
 
-    public static ProjectDataReloader getReloaderForType(Project project, Printer out) {
+    public static ProjectDataReloader getReloaderForType(Project project, Printer out, Clock clock) {
 
         ProjectType type = project.getType();
         if (type.equals(ProjectType.STATIC)) {
-            return new StaticProjectDataReloader(project, out);
+            return new StaticProjectDataReloader(project, out, clock);
         } else if (type.equals(ProjectType.LIVE)) {
-            return new LiveProjectDataReloader(project, out);
+            return new LiveProjectDataReloader(project, out, clock);
         }
         return null;
     }
 
     protected ProjectDataReloader(Project project) {
-        this(project, new SystemOutPrinter());
+        this(project, new SystemOutPrinter(), Clock.systemUTC());
     }
 
-    public ProjectDataReloader(Project project, Printer out) {
+    public ProjectDataReloader(Project project, Printer out, Clock clock) {
         this.project = project;
         this.out = out;
+        this.clock = clock;
     }
 
     /**
@@ -82,7 +85,7 @@ public abstract class ProjectDataReloader {
                 while (!stopped) {
 
                     // remember the start time
-                    long s = System.currentTimeMillis();
+                    long s = clock.millis();
 
                     try {
 
@@ -106,7 +109,7 @@ public abstract class ProjectDataReloader {
                     }
 
                     // calculate the time taken for the reload
-                    long timeUsedForLastReload = System.currentTimeMillis() - s;
+                    long timeUsedForLastReload = clock.millis() - s;
 
                     // sleep until next fetch
                     if (timeUsedForLastReload < RELOAD_PERIOD) {
@@ -164,7 +167,7 @@ public abstract class ProjectDataReloader {
         //... Clear previously cached data
         //...
         //... Cache fresh data
-        project.setProjectDetails("Project details created: " + new Date(System.currentTimeMillis()));
+        project.setProjectDetails("Project details created: " + new Date(clock.millis()));
     }
     
     protected void loadLastUpdateTime() {
@@ -185,7 +188,7 @@ public abstract class ProjectDataReloader {
         //... Clear previously cached data
         //...
         //... Cache fresh data
-        project.setLastUpdateTime("Project update time calculated: " + new Date(System.currentTimeMillis()));
+        project.setLastUpdateTime("Project update time calculated: " + new Date(clock.millis()));
     }
     
     protected void loadLoginStatistics() {
@@ -205,7 +208,7 @@ public abstract class ProjectDataReloader {
         //... Clear previously cached data
         //...
         //... Cache fresh data
-        project.setLoginStatistics("Login statistics looked up: " + new Date(System.currentTimeMillis()));
+        project.setLoginStatistics("Login statistics looked up: " + new Date(clock.millis()));
     }
     
     public void stop() {

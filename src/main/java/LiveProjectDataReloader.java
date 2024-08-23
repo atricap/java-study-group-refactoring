@@ -1,4 +1,6 @@
 
+import java.time.Clock;
+
 /**
  * Reloader for a "live" project, where project data is expected to change
  * frequently.  Periodic reloads are necessary for time of last update, 
@@ -11,8 +13,8 @@ public class LiveProjectDataReloader extends ProjectDataReloader {
         super(project);
     }
 
-    protected LiveProjectDataReloader(Project project, Printer out) {
-        super(project, out);
+    protected LiveProjectDataReloader(Project project, Printer out, Clock clock) {
+        super(project, out, clock);
     }
 
     @Override
