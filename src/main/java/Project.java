@@ -73,29 +73,41 @@ public class Project {
             case LIVE:
                 // load details every other reload attempt
                 if (reloadsCounter1 % 2 == 0) {
-                    new Thread(() -> loadProjectDetails(out1, clock1)).start();
+                    startToLoadProjectDetails(out1, clock1);
                 }
 
                 //do this often
-                new Thread(() -> loadLastUpdateTime(out1, clock1)).start();
+                startToLoadLastUpdateTime(out1, clock1);
 
                 // don't need this very often..
                 // load login statistics every five hundred reload attempts
                 if (reloadsCounter1 % 500 == 0) {
-                    new Thread(() -> loadLoginStatistics(out1, clock1)).start();
+                    startToLoadLoginStatistics(out1, clock1);
                 }
 
                 break;
             case STATIC:
                 // load details every other reload attempt
                 if (reloadsCounter1 % 2 == 0) {
-                    new Thread(() -> loadLoginStatistics(out1, clock1)).start();
+                    startToLoadLoginStatistics(out1, clock1);
                 }
 
                 break;
             default:
                 throw new IllegalStateException("Illegal project type or null");
         }
+    }
+
+    protected void startToLoadProjectDetails(Printer out1, Clock clock1) {
+        new Thread(() -> loadProjectDetails(out1, clock1)).start();
+    }
+
+    protected void startToLoadLastUpdateTime(Printer out1, Clock clock1) {
+        new Thread(() -> loadLastUpdateTime(out1, clock1)).start();
+    }
+
+    protected void startToLoadLoginStatistics(Printer out1, Clock clock1) {
+        new Thread(() -> loadLoginStatistics(out1, clock1)).start();
     }
 
     protected void loadProjectDetails(Printer out1, Clock clock1) {

@@ -43,11 +43,11 @@ public class ProjectDataReloaderTest {
 
     public static void run_static_and_live_reloaders(int sleep1, int sleep2, Printer out) throws InterruptedException {
         ProjectDataReloader reloader1 = ProjectDataReloader.getReloaderForType(
-                new Project("project1", ProjectType.STATIC, out),
+                new TestableProject("project1", ProjectType.STATIC, out),
                 out, clock);
 
         ProjectDataReloader reloader2 = ProjectDataReloader.getReloaderForType(
-                new Project("project2", ProjectType.LIVE, out),
+                new TestableProject("project2", ProjectType.LIVE, out),
                 out, clock);
 
         reloader1.start();
@@ -62,7 +62,7 @@ public class ProjectDataReloaderTest {
 
     public static void run_static_reloader(int sleep1, Printer out) throws InterruptedException {
         ProjectDataReloader reloader1 = ProjectDataReloader.getReloaderForType(
-                new Project("project1", ProjectType.STATIC, out),
+                new TestableProject("project1", ProjectType.STATIC, out),
                 out, clock);
 
         reloader1.start();
@@ -73,7 +73,7 @@ public class ProjectDataReloaderTest {
 
     public static void run_live_reloader(int sleep1, Printer out) throws InterruptedException {
         ProjectDataReloader reloader2 = ProjectDataReloader.getReloaderForType(
-                new Project("project2", ProjectType.LIVE, out),
+                new TestableProject("project2", ProjectType.LIVE, out),
                 out, clock);
 
         reloader2.start();
