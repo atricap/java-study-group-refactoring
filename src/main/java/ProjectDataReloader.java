@@ -1,6 +1,7 @@
 
 import java.time.Clock;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -33,7 +34,7 @@ public class ProjectDataReloader {
      * Counts how many times the reloadProjectData() method has been called,
      * used for reloading data types more or less often
      */
-    protected int reloadsCounter = 0;
+    protected final AtomicInteger reloadsCounter = new AtomicInteger(0);
 
     protected Printer out;
     protected Clock clock;
@@ -90,7 +91,7 @@ public class ProjectDataReloader {
             // call a project-type-specific reloading procedure that reloads some of the project data from
             // persistence
             out.println("Starting reloading for project " + project.getName());
-            project.reloadProjectData(reloadsCounter, out, clock);
+            project.reloadProjectData(reloadsCounter.get(), out, clock);
             out.println("Done reloading for project " + project.getName());
             out.println(project.getPretty());
             out.println();
@@ -100,7 +101,7 @@ public class ProjectDataReloader {
                     + e.getMessage());
         }
 
-        reloadsCounter++;
+        reloadsCounter.incrementAndGet();
     }
 
     public static void main(String[] args) {
